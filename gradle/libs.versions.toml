@@ -50,6 +50,10 @@ androidx-security-crypto = { group = "androidx.security", name = "security-crypt
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-hilt-work = { group = "androidx.hilt", name = "hilt-work", version.ref = "hiltWork" }
 androidx-hilt-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "hiltWork" }
+# Hilt Navigation Compose：提供 hiltViewModel() 函数
+androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltWork" }
+# Material Icons Extended：提供 ContentPaste、QrCodeScanner 等图标
+androidx-compose-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

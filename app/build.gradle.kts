@@ -79,6 +79,10 @@ dependencies {
     ksp(libs.hilt.compiler)
     implementation(libs.androidx.hilt.work)
     ksp(libs.androidx.hilt.compiler)
+    // Hilt Navigation Compose：提供 hiltViewModel() 函数
+    implementation(libs.androidx.hilt.navigation.compose)
+    // Material Icons Extended：提供 ContentPaste、QrCodeScanner 等扩展图标
+    implementation(libs.androidx.compose.material.icons.extended)
     
     // Serialization
     implementation(libs.kotlinx.serialization.json)

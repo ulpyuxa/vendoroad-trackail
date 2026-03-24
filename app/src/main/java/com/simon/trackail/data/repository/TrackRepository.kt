@@ -121,7 +121,9 @@ class TrackRepository @Inject constructor(
     suspend fun addAndRegisterShipment(token: String, shipment: Shipment): Long {
         // 1. 调用 17TRACK API 进行注册
         try {
-            val request = RegisterRequest(number = shipment.trackingNumber, carrier = shipment.carrierCode)
+            // carrier 字段为 17TRACK 运营商 ID (Int)，Shipment.carrierCode 为字符串代码，不直接传递
+            // 传入 null 让 API 自动识别运营商
+            val request = RegisterRequest(number = shipment.trackingNumber)
             apiService.register(token, listOf(request))
         } catch (e: Exception) {
             // 即使注册失败，也先保存到本地，后续重试

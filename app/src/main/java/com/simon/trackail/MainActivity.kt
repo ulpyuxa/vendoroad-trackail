@@ -42,7 +42,7 @@ fun TrackailApp(startDestination: String) {
     NavHost(navController = navController, startDestination = startDestination) {
         composable("onboarding") {
             OnboardingScreen(
-                onSuccess = {
+                onNavigateToDashboard = {
                     navController.navigate("dashboard") {
                         popUpTo("onboarding") { inclusive = true }
                     }
@@ -59,7 +59,7 @@ fun TrackailApp(startDestination: String) {
         
         composable("add_shipment") {
             AddShipmentScreen(
-                onBackClick = { navController.popBackStack() },
+                onBack = { navController.popBackStack() },
                 onSuccess = { navController.popBackStack() }
             )
         }

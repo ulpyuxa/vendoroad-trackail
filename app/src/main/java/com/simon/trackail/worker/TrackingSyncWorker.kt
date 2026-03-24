@@ -39,7 +39,8 @@ class TrackingSyncWorker @AssistedInject constructor(
         try {
             // 这里为了简化实现，直接取前 40 个
             val requestBatch = shipmentsToRefresh.take(40).map { 
-                TrackInfoRequest(number = it.trackingNumber, carrier = it.carrierCode)
+                // carrier 字段为 17TRACK 运营商 ID (Int)，此处不传递让 API 自动识别
+                TrackInfoRequest(number = it.trackingNumber)
             }
 
             // 调用 repository 里的刷新逻辑

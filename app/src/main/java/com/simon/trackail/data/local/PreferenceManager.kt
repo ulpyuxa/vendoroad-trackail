@@ -78,4 +78,19 @@ class PreferenceManager @Inject constructor(
     fun getSyncFrequency(): Int {
         return sharedPreferences.getInt(KEY_SYNC_FREQUENCY, 4)
     }
-}
+
+    /**
+     * 获取同步间隔（Long 类型，供 WorkManager 使用）
+     * @return 同步间隔小时数，默认 4 小时
+     */
+    fun getSyncInterval(): Long {
+        return sharedPreferences.getInt(KEY_SYNC_FREQUENCY, 4).toLong()
+    }
+
+    /**
+     * 设置同步间隔（Long 类型，供 SettingsViewModel 调用）
+     * @param hours 同步间隔小时数
+     */
+    fun setSyncInterval(hours: Long) {
+        sharedPreferences.edit().putInt(KEY_SYNC_FREQUENCY, hours.toInt()).apply()
+    }
