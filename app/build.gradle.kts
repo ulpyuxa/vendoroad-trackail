@@ -47,6 +47,13 @@ kotlin {
     }
 }
 
+// kapt 配置块：启用 correctErrorTypes 以兼容 Hilt 注解处理
+kapt {
+    correctErrorTypes = true
+    // 使用 mapDiagnosticLocations 帮助定位注解处理器错误
+    mapDiagnosticLocations = true
+}
+
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
