@@ -29,6 +29,7 @@ class PreferenceManager @Inject constructor(
 
     companion object {
         private const val KEY_17TRACK_API_KEY = "17track_api_key"
+        private const val KEY_SYNC_FREQUENCY = "sync_frequency"
     }
 
     /**
@@ -48,10 +49,33 @@ class PreferenceManager @Inject constructor(
     }
 
     /**
+     * 清除 17TRACK API Key。
+     */
+    fun clear17TrackApiKey() {
+        sharedPreferences.edit().remove(KEY_17TRACK_API_KEY).apply()
+    }
+
+    /**
      * 检查 17TRACK API Key 是否已配置。
      * @return 如果已配置则返回 true，否则返回 false
      */
     fun is17TrackApiKeyConfigured(): Boolean {
         return get17TrackApiKey().isNotBlank()
+    }
+
+    /**
+     * 保存同步频率。
+     * @param frequency 同步频率（单位：小时）
+     */
+    fun saveSyncFrequency(frequency: Int) {
+        sharedPreferences.edit().putInt(KEY_SYNC_FREQUENCY, frequency).apply()
+    }
+
+    /**
+     * 获取同步频率。
+     * @return 存储的同步频率，默认值为 4 小时
+     */
+    fun getSyncFrequency(): Int {
+        return sharedPreferences.getInt(KEY_SYNC_FREQUENCY, 4)
     }
 }

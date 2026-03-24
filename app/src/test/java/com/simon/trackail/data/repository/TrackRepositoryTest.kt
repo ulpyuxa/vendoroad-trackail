@@ -2,6 +2,7 @@ package com.simon.trackail.data.repository
 
 import androidx.work.WorkManager
 import com.simon.trackail.data.local.dao.ShipmentDao
+import com.simon.trackail.data.local.dao.TrackingEventDao
 import com.simon.trackail.data.local.entity.Shipment
 import com.simon.trackail.data.remote.TrackApiService
 import kotlinx.coroutines.test.runTest
@@ -20,6 +21,9 @@ class TrackRepositoryTest {
     private lateinit var shipmentDao: ShipmentDao
 
     @Mock
+    private lateinit var trackingEventDao: TrackingEventDao
+
+    @Mock
     private lateinit var apiService: TrackApiService
 
     @Mock
@@ -30,7 +34,7 @@ class TrackRepositoryTest {
     @Before
     fun setup() {
         MockitoAnnotations.openMocks(this)
-        repository = TrackRepository(shipmentDao, apiService, workManager)
+        repository = TrackRepository(shipmentDao, trackingEventDao, apiService, workManager)
     }
 
     @Test

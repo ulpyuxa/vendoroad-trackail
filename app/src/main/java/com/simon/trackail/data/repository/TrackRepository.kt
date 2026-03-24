@@ -2,12 +2,15 @@ package com.simon.trackail.data.repository
 
 import androidx.work.*
 import com.simon.trackail.data.local.dao.ShipmentDao
+import com.simon.trackail.data.local.dao.TrackingEventDao
 import com.simon.trackail.data.local.entity.Shipment
+import com.simon.trackail.data.local.entity.TrackingEvent
 import com.simon.trackail.data.remote.TrackApiService
 import com.simon.trackail.data.remote.model.RegisterRequest
 import com.simon.trackail.data.remote.model.TrackInfoRequest
 import com.simon.trackail.worker.TrackingSyncWorker
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -19,9 +22,22 @@ import javax.inject.Singleton
 @Singleton
 class TrackRepository @Inject constructor(
     private val shipmentDao: ShipmentDao,
+    private val trackingEventDao: TrackingEventDao,
     private val apiService: TrackApiService,
     private val workManager: WorkManager
 ) {
+    /**
+     * 获取所有数据用于导出 (JSON)
+     */
+    suspend fun getAllDataForExport(): Map<String, Any> {
+        val shipments = shipmentDao.getAllShipments().first()
+        val events = trackingEventDao.getAllEvents()
+        return mapOf(
+            "shipments" to shipments,
+            "events" to events,
+            "exportTime" to System.currentTimeMillis()
+        )
+    }
     companion object {
         const val SYNC_WORK_NAME = "tracking_sync_work"
     }
