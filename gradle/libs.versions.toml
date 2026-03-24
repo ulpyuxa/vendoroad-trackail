@@ -14,8 +14,10 @@ work = "2.10.0"
 hilt = "2.53"
 serialization = "1.7.3"
 securityCrypto = "1.1.0-alpha06"
+navigationCompose = "2.8.5"
 
 [libraries]
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
