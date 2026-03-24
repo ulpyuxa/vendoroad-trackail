@@ -4,7 +4,8 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.hilt.android)
     alias(libs.plugins.kotlin.serialization)
-    id("kotlin-kapt")
+    // 使用 KSP 替代 kapt，完全兼容 Kotlin 2.x
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -47,12 +48,6 @@ kotlin {
     }
 }
 
-// kapt 配置块：启用 correctErrorTypes 以兼容 Hilt 注解处理
-kapt {
-    correctErrorTypes = true
-    // 使用 mapDiagnosticLocations 帮助定位注解处理器错误
-    mapDiagnosticLocations = true
-}
 
 dependencies {
     implementation(libs.androidx.core.ktx)
@@ -66,10 +61,10 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.material)
     
-    // Room
+    // Room - 使用 ksp 替代 kapt 处理注解
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
-    kapt(libs.androidx.room.compiler)
+    ksp(libs.androidx.room.compiler)
     
     // Retrofit
     implementation(libs.retrofit)
@@ -79,11 +74,11 @@ dependencies {
     // WorkManager
     implementation(libs.androidx.work.runtime.ktx)
     
-    // Hilt
+    // Hilt - 使用 ksp 替代 kapt 处理注解
     implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
+    ksp(libs.hilt.compiler)
     implementation(libs.androidx.hilt.work)
-    kapt(libs.androidx.hilt.compiler)
+    ksp(libs.androidx.hilt.compiler)
     
     // Serialization
     implementation(libs.kotlinx.serialization.json)

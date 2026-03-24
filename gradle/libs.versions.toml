@@ -1,6 +1,8 @@
 [versions]
 agp = "8.7.3"
 kotlin = "2.1.0"
+# KSP 版本需与 Kotlin 版本匹配（格式：kotlin版本-ksp版本）
+ksp = "2.1.0-1.0.29"
 coreKtx = "1.15.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
@@ -55,3 +57,5 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+# KSP 插件，替代 kapt 用于注解处理
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
