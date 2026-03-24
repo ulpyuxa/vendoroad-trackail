@@ -1,5 +1,6 @@
 package com.simon.trackail.data.repository
 
+import androidx.work.WorkManager
 import com.simon.trackail.data.local.dao.ShipmentDao
 import com.simon.trackail.data.local.entity.Shipment
 import com.simon.trackail.data.remote.TrackApiService
@@ -21,12 +22,15 @@ class TrackRepositoryTest {
     @Mock
     private lateinit var apiService: TrackApiService
 
+    @Mock
+    private lateinit var workManager: WorkManager
+
     private lateinit var repository: TrackRepository
 
     @Before
     fun setup() {
         MockitoAnnotations.openMocks(this)
-        repository = TrackRepository(shipmentDao, apiService)
+        repository = TrackRepository(shipmentDao, apiService, workManager)
     }
 
     @Test

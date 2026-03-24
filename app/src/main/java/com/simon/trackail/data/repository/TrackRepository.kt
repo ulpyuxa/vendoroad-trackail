@@ -1,10 +1,14 @@
 package com.simon.trackail.data.repository
 
+import androidx.work.*
 import com.simon.trackail.data.local.dao.ShipmentDao
 import com.simon.trackail.data.local.entity.Shipment
 import com.simon.trackail.data.remote.TrackApiService
 import com.simon.trackail.data.remote.model.RegisterRequest
+import com.simon.trackail.data.remote.model.TrackInfoRequest
+import com.simon.trackail.worker.TrackingSyncWorker
 import kotlinx.coroutines.flow.Flow
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -15,8 +19,56 @@ import javax.inject.Singleton
 @Singleton
 class TrackRepository @Inject constructor(
     private val shipmentDao: ShipmentDao,
-    private val apiService: TrackApiService
+    private val apiService: TrackApiService,
+    private val workManager: WorkManager
 ) {
+    companion object {
+        const val SYNC_WORK_NAME = "tracking_sync_work"
+    }
+
+    /**
+     * 启动定时同步任务
+     * @param intervalHours 刷新频率 (小时)
+     */
+    fun scheduleSync(intervalHours: Long) {
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .setRequiresBatteryNotLow(true)
+            .build()
+
+        val syncRequest = PeriodicWorkRequestBuilder<TrackingSyncWorker>(
+            intervalHours, TimeUnit.HOURS
+        ).setConstraints(constraints)
+            .build()
+
+        workManager.enqueueUniquePeriodicWork(
+            SYNC_WORK_NAME,
+            ExistingPeriodicWorkPolicy.UPDATE,
+            syncRequest
+        )
+    }
+
+    /**
+     * 取消定时同步任务
+     */
+    fun cancelSync() {
+        workManager.cancelUniqueWork(SYNC_WORK_NAME)
+    }
+
+    /**
+     * 刷新指定的单号列表
+     */
+    suspend fun refreshShipments(token: String, requests: List<TrackInfoRequest>) {
+        try {
+            val response = apiService.getTrackInfo(token, requests)
+            if (response.code == 0) {
+                // TODO: 处理响应数据并更新数据库
+                // 解析 response.data.accepted 里的结果
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
     /**
      * 获取所有单号的流
      */

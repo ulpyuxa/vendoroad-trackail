@@ -30,9 +30,9 @@ interface ShipmentDao {
 
     /**
      * 获取需要自动刷新的包裹列表
-     * 条件：在刷新池中 (isInPool = 1) 且状态不是“已妥投” (status != 4)
+     * 条件：在刷新池中 (isInPool = 1) 且状态不是“已妥投” (status != 40)
      */
-    @Query("SELECT * FROM shipments WHERE isInPool = 1 AND status != 4")
+    @Query("SELECT * FROM shipments WHERE isInPool = 1 AND status != 40")
     suspend fun getShipmentsToRefresh(): List<Shipment>
 
     /**
