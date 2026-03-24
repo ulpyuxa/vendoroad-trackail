@@ -31,7 +31,7 @@ interface TrackingEventDao {
     /**
      * 删除指定包裹的所有追踪事件
      */
-    @Query("SELECT * FROM tracking_events WHERE shipmentId = :shipmentId")
+    @Query("DELETE FROM tracking_events WHERE shipmentId = :shipmentId")
     suspend fun deleteEventsByShipmentId(shipmentId: Long)
 
     /**

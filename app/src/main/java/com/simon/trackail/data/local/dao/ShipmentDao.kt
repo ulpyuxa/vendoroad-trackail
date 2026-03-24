@@ -44,6 +44,6 @@ interface ShipmentDao {
     /**
      * 根据 ID 删除包裹
      */
-    @Query("SELECT * FROM shipments WHERE id = :id")
+    @Query("DELETE FROM shipments WHERE id = :id")
     suspend fun deleteShipmentById(id: Long)
 }
