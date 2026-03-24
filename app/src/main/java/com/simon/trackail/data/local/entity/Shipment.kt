@@ -21,5 +21,6 @@ data class Shipment(
     val alias: String?,
     val status: Int,
     val isInPool: Boolean,
+    val lastEvent: String?,
     val lastUpdate: Long
 )
