@@ -34,8 +34,8 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    kotlinOptions {
-        jvmTarget = "11"
+    compilerOptions {
+        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11
     }
     buildFeatures {
         compose = true
@@ -64,7 +64,7 @@ dependencies {
     implementation(libs.okhttp.logging.interceptor)
     
     // WorkManager
-    implementation(libs.androidx.work.runtime-ktx)
+    implementation(libs.androidx.work.runtime.ktx)
     
     // Hilt
     implementation(libs.hilt.android)
