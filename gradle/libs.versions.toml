@@ -16,7 +16,7 @@ serialization = "1.7.3"
 securityCrypto = "1.1.0-alpha06"
 navigationCompose = "2.8.5"
 material = "1.12.0"
-hiltWork = "1.2.0"
+hiltWork = "1.0.0"
 
 [libraries]
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
