@@ -5,8 +5,8 @@
 - [x] Phase 2: Task 3: Implement DAO and Repository
 - [x] Phase 2: Task 4: API Model and Retrofit Service
 - [x] Phase 3: Task 5: Encrypted Storage for API Key
-- [ ] Phase 3: Task 6: Background Sync with WorkManager
-- [ ] Phase 4: Task 7: Onboarding and API Key Configuration
+- [x] Phase 3: Task 6: Background Sync with WorkManager
+- [x] Phase 4: Task 7: Onboarding and API Key Configuration
 - [ ] Phase 4: Task 8: Dashboard and Shipment List
 - [ ] Phase 4: Task 9: Add Shipment Screen (Scan/Clipboard)
 - [ ] Phase 4: Task 10: Settings and Data Export
