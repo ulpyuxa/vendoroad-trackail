@@ -7,7 +7,7 @@
 - [x] Phase 3: Task 5: Encrypted Storage for API Key
 - [x] Phase 3: Task 6: Background Sync with WorkManager
 - [x] Phase 4: Task 7: Onboarding and API Key Configuration
-- [ ] Phase 4: Task 8: Dashboard and Shipment List
+- [x] Phase 4: Task 8: Dashboard and Shipment List
 - [ ] Phase 4: Task 9: Add Shipment Screen (Scan/Clipboard)
 - [ ] Phase 4: Task 10: Settings and Data Export
 - [ ] Phase 5: Task 11: Smoke Testing and Compliance
