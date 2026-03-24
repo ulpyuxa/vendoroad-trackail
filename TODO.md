@@ -1,7 +1,7 @@
 # Trackail Project TODOs
 
 - [x] Phase 1: Task 1: Initialize Android Project Skeleton
-- [ ] Phase 2: Task 2: Implement Room Entities and Database
+- [x] Phase 2: Task 2: Implement Room Entities and Database
 - [ ] Phase 2: Task 3: Implement DAO and Repository
 - [ ] Phase 2: Task 4: API Model and Retrofit Service
 - [ ] Phase 3: Task 5: Encrypted Storage for API Key
