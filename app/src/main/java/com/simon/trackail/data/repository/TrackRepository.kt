@@ -85,8 +85,8 @@ class TrackRepository @Inject constructor(
                         val track = result.track
                         val updatedShipment = shipment.copy(
                             status = track.status,
-                            subStatus = track.subStatus ?: shipment.subStatus,
-                            lastUpdateTime = System.currentTimeMillis()
+                            lastEvent = track.lastEvent ?: shipment.lastEvent,
+                            lastUpdate = System.currentTimeMillis()
                         )
                         shipmentDao.insertShipment(updatedShipment)
 
