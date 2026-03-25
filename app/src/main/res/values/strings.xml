@@ -49,7 +49,7 @@
     <string name="action_export_data">Export local data (JSON)</string>
     <string name="account_api">Account &amp; API</string>
     <string name="action_clear_api_key_logout">Clear API Key and Logout</string>
-    <string name="app_version_info">Trackail v1.0.0 (17TRACK V2.4 API)\nAll data is stored locally, not uploaded.</string>
+    <string name="app_version_info">Trackail v1.0.0\nAll data is stored locally, not uploaded.</string>
     <string name="dialog_prompt">Prompt</string>
     <string name="action_confirm">OK</string>
     <string name="export_success">Export successful (In development)</string>
