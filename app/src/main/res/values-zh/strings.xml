@@ -14,6 +14,8 @@
     <string name="action_settings">设置</string>
     <string name="action_add_shipment">添加单号</string>
     <string name="empty_shipment_list">暂无追踪单号，请点击右下角添加</string>
+    <!-- Shipment Status -->
+    <string name="status_not_found">查询不到</string>
     <string name="status_in_transit">运输中</string>
     <string name="status_picked_up">已揽收</string>
     <string name="status_out_for_delivery">派送中</string>

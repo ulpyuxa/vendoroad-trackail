@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -40,6 +41,11 @@ fun ShipmentDetailsScreen(
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.Default.ArrowBack, contentDescription = stringResource(R.string.action_back))
+                    }
+                },
+                actions = {
+                    IconButton(onClick = { viewModel.forceRefreshRealTime() }) {
+                        Icon(Icons.Default.Refresh, contentDescription = "Refresh Real-Time")
                     }
                 }
             )
@@ -98,6 +104,7 @@ fun ShipmentHeader(shipment: Shipment) {
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             val statusText = when (shipment.status) {
+                0 -> stringResource(R.string.status_not_found)
                 10 -> stringResource(R.string.status_in_transit)
                 20 -> stringResource(R.string.status_picked_up)
                 30 -> stringResource(R.string.status_out_for_delivery)

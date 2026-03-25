@@ -103,6 +103,7 @@ fun ShipmentCard(
     }
 
     val statusText = when (shipment.status) {
+        0 -> stringResource(R.string.status_not_found)
         10 -> stringResource(R.string.status_in_transit)
         20 -> stringResource(R.string.status_picked_up)
         30 -> stringResource(R.string.status_out_for_delivery)

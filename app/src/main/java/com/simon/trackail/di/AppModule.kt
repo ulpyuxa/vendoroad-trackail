@@ -69,7 +69,7 @@ object AppModule {
             coerceInputValues = true
         }
         return Retrofit.Builder()
-            .baseUrl("https://api.17track.net/track/v2/")
+            .baseUrl("https://api.17track.net/track/v2.4/")
             .client(okHttpClient)
             .addConverterFactory(json.asConverterFactory(contentType))
             .build()

@@ -30,7 +30,7 @@ interface TrackApiService {
     ): TrackResponse<DataContainer<RegisterResult>>
 
     /**
-     * 获取单号查询详情 (GetTrackInfo)
+     * 获取单号查询详情 (GetTrackInfo - 缓存/异步)
      * 用于主动拉取已注册单号的最新物流轨迹。
      * 每次请求最多支持 40 个单号。
      *
@@ -45,19 +45,19 @@ interface TrackApiService {
     ): TrackResponse<DataContainer<TrackInfoResult>>
 
     /**
-     * 获取运输商代码 (GetCarrierCode)
-     * 用于自动识别单号所属的运输商。
-     * 每次请求最多支持 40 个单号。
+     * 实时查询物流轨迹 (GetRealTimeTrackInfo - 实时/同步)
+     * 强制立刻向承运商发起查询，获取绝不包含缓存的最新数据。
+     * 每次请求最多支持 40 个单号，单次调用会比 gettrackinfo 耗时更长，且可能产生额外计费。
      *
      * @param token API 密钥 (17token)
-     * @param requests 识别运输商请求列表
-     * @return 响应结果，包含识别出的运输商代码
+     * @param requests 查询详情请求列表
+     * @return 响应结果，包含详细轨迹信息
      */
-    @POST("getcarriercode")
-    suspend fun getCarrierCode(
+    @POST("getRealTimeTrackInfo")
+    suspend fun getRealTimeTrackInfo(
         @Header("17token") token: String,
-        @Body requests: List<CarrierCodeRequest>
-    ): TrackResponse<DataContainer<CarrierResult>>
+        @Body requests: List<TrackInfoRequest>
+    ): TrackResponse<DataContainer<TrackInfoResult>>
 
     /**
      * 用于验证 API Key 是否有效的独立接口

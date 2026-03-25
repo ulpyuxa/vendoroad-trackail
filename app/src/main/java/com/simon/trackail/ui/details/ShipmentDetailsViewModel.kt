@@ -63,4 +63,23 @@ class ShipmentDetailsViewModel @Inject constructor(
             }
         }
     }
+
+    /**
+     * 手动触发实时查询 (GetRealTimeTrackInfo)
+     */
+    fun forceRefreshRealTime() {
+        viewModelScope.launch {
+            val shipmentDetail = repository.getShipmentById(shipmentId)
+            shipmentDetail?.let {
+                val token = preferenceManager.get17TrackApiKey()
+                if (token.isNotBlank()) {
+                    val req = com.simon.trackail.data.remote.model.TrackInfoRequest(
+                        number = it.trackingNumber,
+                        carrier = it.carrierCode?.toIntOrNull()
+                    )
+                    repository.refreshRealTimeShipment(token, listOf(req))
+                }
+            }
+        }
+    }
 }

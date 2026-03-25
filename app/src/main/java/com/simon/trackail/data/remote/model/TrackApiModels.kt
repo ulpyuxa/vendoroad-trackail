@@ -56,15 +56,6 @@ data class TrackInfoRequest(
 )
 
 /**
- * 获取运输商代码请求
- * @param number 快递单号
- */
-@Serializable
-data class CarrierCodeRequest(
-    @SerialName("number") val number: String
-)
-
-/**
  * 拒绝受理的项目信息
  */
 @Serializable
@@ -87,15 +78,6 @@ data class ErrorInfo(
  */
 @Serializable
 data class RegisterResult(
-    @SerialName("number") val number: String,
-    @SerialName("carrier") val carrier: Int
-)
-
-/**
- * 运输商识别结果
- */
-@Serializable
-data class CarrierResult(
     @SerialName("number") val number: String,
     @SerialName("carrier") val carrier: Int
 )

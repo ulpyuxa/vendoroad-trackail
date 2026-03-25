@@ -79,6 +79,20 @@ class TrackRepository @Inject constructor(
             val response = apiService.getTrackInfo(token, requests)
             if (response.code == 0) {
                 val acceptedList = response.data?.accepted ?: emptyList()
+                val rejectedList = response.data?.rejected ?: emptyList()
+
+                // 如果被拒绝是因为尚未注册或过期等情况，可以在这里发起重新注册
+                if (rejectedList.isNotEmpty()) {
+                    val toRegister = rejectedList.map { 
+                        com.simon.trackail.data.remote.model.RegisterRequest(number = it.number) 
+                    }
+                    try {
+                        apiService.register(token, toRegister)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+
                 acceptedList.forEach { result ->
                     val shipment = shipmentDao.getShipmentByTrackingNumber(result.number)
                     if (shipment != null) {
@@ -94,10 +108,11 @@ class TrackRepository @Inject constructor(
                         track.destination?.events?.let { allEvents.addAll(it) }
                         track.origin?.events?.let { allEvents.addAll(it) }
 
-                        val df = java.text.SimpleDateFormat("yyyy-MM-dd HH:mm", java.util.Locale.getDefault())
+                        val df1 = java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault())
+                        val df2 = java.text.SimpleDateFormat("yyyy-MM-dd HH:mm", java.util.Locale.getDefault())
                         val entities = allEvents.map { event ->
                             val timestamp = try {
-                                df.parse(event.time)?.time ?: System.currentTimeMillis()
+                                df1.parse(event.time)?.time ?: df2.parse(event.time)?.time ?: System.currentTimeMillis()
                             } catch (e: Exception) {
                                 System.currentTimeMillis()
                             }
@@ -197,6 +212,57 @@ class TrackRepository @Inject constructor(
     suspend fun updateShipments(shipments: List<Shipment>) {
         shipments.forEach {
             shipmentDao.insertShipment(it)
+        }
+    }
+    /**
+     * 调用 17TRACK 实时查询接口 (GetRealTimeTrackInfo)
+     * 会强制穿透缓存直连承运商，因此可能耗时较长 (几秒钟)。
+     */
+    suspend fun refreshRealTimeShipment(token: String, requests: List<TrackInfoRequest>) {
+        try {
+            val response = apiService.getRealTimeTrackInfo(token, requests)
+            if (response.code == 0) {
+                val acceptedList = response.data?.accepted ?: emptyList()
+                acceptedList.forEach { result ->
+                    val shipment = shipmentDao.getShipmentByTrackingNumber(result.number)
+                    if (shipment != null) {
+                        val track = result.track
+                        val updatedShipment = shipment.copy(
+                            status = track.status,
+                            lastEvent = track.lastEvent ?: shipment.lastEvent,
+                            lastUpdate = System.currentTimeMillis()
+                        )
+                        shipmentDao.insertShipment(updatedShipment)
+
+                        val allEvents = mutableListOf<com.simon.trackail.data.remote.model.TrackEvent>()
+                        track.destination?.events?.let { allEvents.addAll(it) }
+                        track.origin?.events?.let { allEvents.addAll(it) }
+
+                        val df1 = java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault())
+                        val df2 = java.text.SimpleDateFormat("yyyy-MM-dd HH:mm", java.util.Locale.getDefault())
+                        val entities = allEvents.map { event ->
+                            val timestamp = try {
+                                df1.parse(event.time)?.time ?: df2.parse(event.time)?.time ?: System.currentTimeMillis()
+                            } catch (e: Exception) {
+                                System.currentTimeMillis()
+                            }
+                            TrackingEvent(
+                                shipmentId = shipment.id,
+                                eventTime = timestamp,
+                                location = event.location,
+                                content = event.translatedDescription ?: event.originalDescription
+                            )
+                        }
+
+                        if (entities.isNotEmpty()) {
+                            trackingEventDao.deleteEventsByShipmentId(shipment.id)
+                            trackingEventDao.insertEvents(entities.sortedByDescending { it.eventTime })
+                        }
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 }
