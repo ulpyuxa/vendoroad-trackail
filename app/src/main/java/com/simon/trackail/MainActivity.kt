@@ -1,7 +1,7 @@
 package com.simon.trackail
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
@@ -12,13 +12,14 @@ import androidx.navigation.compose.rememberNavController
 import com.simon.trackail.data.local.PreferenceManager
 import com.simon.trackail.ui.add.AddShipmentScreen
 import com.simon.trackail.ui.dashboard.DashboardScreen
+import com.simon.trackail.ui.details.ShipmentDetailsScreen
 import com.simon.trackail.ui.onboarding.OnboardingScreen
 import com.simon.trackail.ui.settings.SettingsScreen
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var preferenceManager: PreferenceManager
@@ -59,7 +60,10 @@ fun TrackailApp(startDestination: String) {
         composable("dashboard") {
             DashboardScreen(
                 onAddClick = { navController.navigate("add_shipment") },
-                onSettingsClick = { navController.navigate("settings") }
+                onSettingsClick = { navController.navigate("settings") },
+                onShipmentClick = { shipmentId ->
+                    navController.navigate("shipment_details/$shipmentId")
+                }
             )
         }
         
@@ -78,6 +82,12 @@ fun TrackailApp(startDestination: String) {
                         popUpTo(0) { inclusive = true }
                     }
                 }
+            )
+        }
+
+        composable("shipment_details/{shipmentId}") {
+            ShipmentDetailsScreen(
+                onBack = { navController.popBackStack() }
             )
         }
     }

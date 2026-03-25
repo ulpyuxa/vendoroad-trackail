@@ -81,6 +81,59 @@ fun SettingsScreen(
 
             Divider()
 
+            // 语言设置
+            SectionTitle(stringResource(R.string.language_settings))
+
+            var expandedLanguage by remember { mutableStateOf(false) }
+            val currentLang = viewModel.getCurrentLanguage()
+            val currentLangText = when {
+                currentLang.startsWith("zh") -> stringResource(R.string.language_chinese)
+                currentLang.startsWith("en") -> stringResource(R.string.language_english)
+                else -> stringResource(R.string.language_system)
+            }
+
+            ExposedDropdownMenuBox(
+                expanded = expandedLanguage,
+                onExpandedChange = { expandedLanguage = !expandedLanguage },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                OutlinedTextField(
+                    value = currentLangText,
+                    onValueChange = {},
+                    readOnly = true,
+                    modifier = Modifier.menuAnchor().fillMaxWidth(),
+                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedLanguage) }
+                )
+                ExposedDropdownMenu(
+                    expanded = expandedLanguage,
+                    onDismissRequest = { expandedLanguage = false }
+                ) {
+                    DropdownMenuItem(
+                        text = { Text(stringResource(R.string.language_system)) },
+                        onClick = {
+                            viewModel.setLanguage("system")
+                            expandedLanguage = false
+                        }
+                    )
+                    DropdownMenuItem(
+                        text = { Text(stringResource(R.string.language_english)) },
+                        onClick = {
+                            viewModel.setLanguage("en")
+                            expandedLanguage = false
+                        }
+                    )
+                    DropdownMenuItem(
+                        text = { Text(stringResource(R.string.language_chinese)) },
+                        onClick = {
+                            viewModel.setLanguage("zh-CN")
+                            expandedLanguage = false
+                        }
+                    )
+                }
+            }
+
+            Divider()
+
             // 数据导出
             SectionTitle(stringResource(R.string.data_management))
             

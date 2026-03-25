@@ -12,6 +12,8 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
 import android.content.Context
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
 import dagger.hilt.android.qualifiers.ApplicationContext
 import com.simon.trackail.R
 
@@ -47,6 +49,26 @@ class SettingsViewModel @Inject constructor(
     fun clearApiKey() {
         preferenceManager.save17TrackApiKey("")
         repository.cancelSync()
+    }
+
+    /**
+     * 获取当前手动设置的语言
+     */
+    fun getCurrentLanguage(): String {
+        val locales = AppCompatDelegate.getApplicationLocales()
+        return if (locales.isEmpty) "system" else locales.get(0)?.toLanguageTag() ?: "system"
+    }
+
+    /**
+     * 切换语言
+     */
+    fun setLanguage(languageTag: String) {
+        val localeList = if (languageTag == "system") {
+            LocaleListCompat.getEmptyLocaleList()
+        } else {
+            LocaleListCompat.forLanguageTags(languageTag)
+        }
+        AppCompatDelegate.setApplicationLocales(localeList)
     }
 
     /**

@@ -111,6 +111,11 @@ class TrackRepository @Inject constructor(
     suspend fun getShipmentById(id: Long): Shipment? = shipmentDao.getShipmentById(id)
 
     /**
+     * 获取指定包裹的所有追踪事件
+     */
+    fun getEventsByShipmentId(shipmentId: Long): Flow<List<TrackingEvent>> = trackingEventDao.getEventsByShipmentId(shipmentId)
+
+    /**
      * 添加或更新单号并注册到 17TRACK
      * @param token API 密钥
      * @param shipment 包裹信息

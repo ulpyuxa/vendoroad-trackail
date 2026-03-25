@@ -31,6 +31,7 @@ import com.simon.trackail.R
 fun DashboardScreen(
     onAddClick: () -> Unit,
     onSettingsClick: () -> Unit,
+    onShipmentClick: (Long) -> Unit,
     viewModel: DashboardViewModel = hiltViewModel()
 ) {
     val shipments by viewModel.shipments.collectAsState()
@@ -41,7 +42,7 @@ fun DashboardScreen(
                 title = { Text(stringResource(R.string.dashboard_title)) },
                 actions = {
                     IconButton(onClick = onSettingsClick) {
-                        Icon(Icons.Default.Refresh, contentDescription = stringResource(R.string.action_settings))
+                        Icon(Icons.Default.Settings, contentDescription = stringResource(R.string.action_settings))
                     }
                 }
             )
@@ -73,7 +74,8 @@ fun DashboardScreen(
                     ShipmentCard(
                         shipment = shipment,
                         onTogglePool = { viewModel.togglePoolStatus(shipment) },
-                        onDelete = { viewModel.deleteShipment(shipment) }
+                        onDelete = { viewModel.deleteShipment(shipment) },
+                        onClick = { onShipmentClick(shipment.id) }
                     )
                 }
             }
@@ -84,11 +86,13 @@ fun DashboardScreen(
 /**
  * 单个物流卡片组件
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShipmentCard(
     shipment: Shipment,
     onTogglePool: () -> Unit,
-    onDelete: () -> Unit
+    onDelete: () -> Unit,
+    onClick: () -> Unit
 ) {
     val statusColor = when (shipment.status) {
         40 -> Color(0xFF4CAF50) // 已妥投 - 绿色
@@ -110,6 +114,7 @@ fun ShipmentCard(
     }
 
     ElevatedCard(
+        onClick = onClick,
         modifier = Modifier.fillMaxWidth(),
     ) {
         Column(

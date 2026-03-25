@@ -54,4 +54,14 @@
     <string name="action_confirm">OK</string>
     <string name="export_success">Export successful (In development)</string>
     <string name="export_failed">Export failed: %s</string>
+    
+    <string name="language_settings">Language</string>
+    <string name="language_system">System Default</string>
+    <string name="language_english">English</string>
+    <string name="language_chinese">简体中文</string>
+    
+    <string name="shipment_details_title">Shipment Details</string>
+    <string name="no_events">No tracking events available yet</string>
+    <string name="event_timeline">Tracking Timeline</string>
+    <string name="unknown_location">Unknown Location</string>
 </resources>
