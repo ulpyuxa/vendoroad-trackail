@@ -3,6 +3,7 @@ package com.simon.trackail.ui.details
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.simon.trackail.data.local.PreferenceManager
 import com.simon.trackail.data.local.entity.Shipment
 import com.simon.trackail.data.local.entity.TrackingEvent
 import com.simon.trackail.data.repository.TrackRepository
@@ -16,6 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ShipmentDetailsViewModel @Inject constructor(
     private val repository: TrackRepository,
+    private val preferenceManager: PreferenceManager,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -37,7 +39,20 @@ class ShipmentDetailsViewModel @Inject constructor(
 
     private fun loadShipmentDetails() {
         viewModelScope.launch {
-            _shipment.value = repository.getShipmentById(shipmentId)
+            val shipmentDetail = repository.getShipmentById(shipmentId)
+            _shipment.value = shipmentDetail
+            
+            // Trigger API refresh
+            shipmentDetail?.let {
+                val token = preferenceManager.get17TrackApiKey()
+                if (token.isNotBlank()) {
+                    val req = com.simon.trackail.data.remote.model.TrackInfoRequest(
+                        number = it.trackingNumber,
+                        carrier = it.carrierCode?.toIntOrNull()
+                    )
+                    repository.refreshShipments(token, listOf(req))
+                }
+            }
         }
     }
 

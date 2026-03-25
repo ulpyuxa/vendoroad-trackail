@@ -78,8 +78,43 @@ class TrackRepository @Inject constructor(
         try {
             val response = apiService.getTrackInfo(token, requests)
             if (response.code == 0) {
-                // TODO: 处理响应数据并更新数据库
-                // 解析 response.data.accepted 里的结果
+                val acceptedList = response.data?.accepted ?: emptyList()
+                acceptedList.forEach { result ->
+                    val shipment = shipmentDao.getShipmentByTrackingNumber(result.number)
+                    if (shipment != null) {
+                        val track = result.track
+                        val updatedShipment = shipment.copy(
+                            status = track.status,
+                            subStatus = track.subStatus ?: shipment.subStatus,
+                            lastUpdateTime = System.currentTimeMillis()
+                        )
+                        shipmentDao.insertShipment(updatedShipment)
+
+                        val allEvents = mutableListOf<com.simon.trackail.data.remote.model.TrackEvent>()
+                        track.destination?.events?.let { allEvents.addAll(it) }
+                        track.origin?.events?.let { allEvents.addAll(it) }
+
+                        val df = java.text.SimpleDateFormat("yyyy-MM-dd HH:mm", java.util.Locale.getDefault())
+                        val entities = allEvents.map { event ->
+                            val timestamp = try {
+                                df.parse(event.time)?.time ?: System.currentTimeMillis()
+                            } catch (e: Exception) {
+                                System.currentTimeMillis()
+                            }
+                            TrackingEvent(
+                                shipmentId = shipment.id,
+                                eventTime = timestamp,
+                                location = event.location,
+                                content = event.translatedDescription ?: event.originalDescription
+                            )
+                        }
+
+                        if (entities.isNotEmpty()) {
+                            trackingEventDao.deleteEventsByShipmentId(shipment.id)
+                            trackingEventDao.insertEvents(entities.sortedByDescending { it.eventTime })
+                        }
+                    }
+                }
             }
         } catch (e: Exception) {
             e.printStackTrace()

@@ -22,6 +22,12 @@ interface ShipmentDao {
     suspend fun getShipmentById(id: Long): Shipment?
 
     /**
+     * 根据单号获取包裹
+     */
+    @Query("SELECT * FROM shipments WHERE trackingNumber = :trackingNumber LIMIT 1")
+    suspend fun getShipmentByTrackingNumber(trackingNumber: String): Shipment?
+
+    /**
      * 插入或更新包裹
      * @return 插入后的行 ID
      */

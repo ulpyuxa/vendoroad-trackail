@@ -132,7 +132,7 @@ fun ShipmentHeader(shipment: Shipment) {
 @Composable
 fun TrackingEventItem(event: TrackingEvent) {
     val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
-    val eventTimeStr = dateFormat.format(Date(event.eventTime * 1000L)) // Default to * 1000 assuming unix epoch, adjust if eventTime is ms
+    val eventTimeStr = dateFormat.format(Date(event.eventTime))
 
     Row(modifier = Modifier.fillMaxWidth()) {
         Column(
