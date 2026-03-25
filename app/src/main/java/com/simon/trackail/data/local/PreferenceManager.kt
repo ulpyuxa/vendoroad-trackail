@@ -47,8 +47,8 @@ class PreferenceManager @Inject constructor(
                 EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
                 EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
             )
-        } catch (e: Exception) {
-            // 加密初始化失败（设备不兼容或 keystore 损坏），降级为普通存储
+        } catch (e: Throwable) {
+            // 加密初始化失败（设备不兼容、keystore 损坏或底层依赖异常），降级为普通存储
             e.printStackTrace()
             null
         }

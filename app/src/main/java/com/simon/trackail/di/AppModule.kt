@@ -36,7 +36,9 @@ object AppModule {
             context,
             TrackailDatabase::class.java,
             "trackail.db"
-        ).build()
+        )
+        .fallbackToDestructiveMigration()
+        .build()
     }
 
     @Provides

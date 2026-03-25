@@ -69,7 +69,7 @@ class OnboardingViewModel @Inject constructor(
                     // 验证失败
                     errorMessage = "API Key 验证失败，请检查输入是否正确"
                 }
-            } catch (e: Exception) {
+            } catch (e: Throwable) {
                 // 网络请求或存储异常，展示错误信息
                 errorMessage = "验证出错：${e.message ?: "未知错误"}"
                 e.printStackTrace()
