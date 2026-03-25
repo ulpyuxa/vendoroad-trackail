@@ -76,11 +76,6 @@ object AppModule {
         return retrofit.create(TrackApiService::class.java)
     }
 
-    @Provides
-    @Singleton
-    fun providePreferenceManager(@ApplicationContext context: Context): PreferenceManager {
-        return PreferenceManager(context)
-    }
 
     @Provides
     @Singleton

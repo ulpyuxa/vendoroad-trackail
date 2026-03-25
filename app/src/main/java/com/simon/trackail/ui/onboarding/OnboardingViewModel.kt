@@ -59,18 +59,23 @@ class OnboardingViewModel @Inject constructor(
         viewModelScope.launch {
             isLoading = true
             errorMessage = null
-            
-            val isValid = repository.validateApiKey(apiKey)
-            
-            if (isValid) {
-                // 验证通过，保存 Key 并触发跳转
-                preferenceManager.save17TrackApiKey(apiKey)
-                _navigateToDashboard.emit(Unit)
-            } else {
-                // 验证失败
-                errorMessage = "API Key 验证失败，请检查输入是否正确"
+            try {
+                val isValid = repository.validateApiKey(apiKey)
+                if (isValid) {
+                    // 验证通过，保存 Key 并触发跳转
+                    preferenceManager.save17TrackApiKey(apiKey)
+                    _navigateToDashboard.emit(Unit)
+                } else {
+                    // 验证失败
+                    errorMessage = "API Key 验证失败，请检查输入是否正确"
+                }
+            } catch (e: Exception) {
+                // 网络请求或存储异常，展示错误信息
+                errorMessage = "验证出错：${e.message ?: "未知错误"}"
+                e.printStackTrace()
+            } finally {
+                isLoading = false
             }
-            isLoading = false
         }
     }
 }
