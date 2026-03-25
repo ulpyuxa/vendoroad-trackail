@@ -11,6 +11,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import android.content.Context
+import dagger.hilt.android.qualifiers.ApplicationContext
+import com.simon.trackail.R
 
 /**
  * 添加包裹 ViewModel
@@ -18,7 +21,8 @@ import javax.inject.Inject
 @HiltViewModel
 class AddShipmentViewModel @Inject constructor(
     private val repository: TrackRepository,
-    private val preferenceManager: PreferenceManager
+    private val preferenceManager: PreferenceManager,
+    @ApplicationContext private val context: Context
 ) : ViewModel() {
 
     private val _trackingNumber = MutableStateFlow("")
@@ -87,7 +91,7 @@ class AddShipmentViewModel @Inject constructor(
                 alias = _alias.value.trim().ifBlank { null },
                 status = 0, // 初始状态：查询中
                 isInPool = true,
-                lastEvent = "已手动添加",
+                lastEvent = context.getString(R.string.manually_added),
                 lastUpdate = System.currentTimeMillis()
             )
 

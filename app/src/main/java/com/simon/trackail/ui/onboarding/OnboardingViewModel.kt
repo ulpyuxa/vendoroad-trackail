@@ -8,10 +8,13 @@ import androidx.lifecycle.viewModelScope
 import com.simon.trackail.data.local.PreferenceManager
 import com.simon.trackail.data.repository.TrackRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import android.content.Context
+import com.simon.trackail.R
 
 /**
  * 入站引导界面的 ViewModel
@@ -20,7 +23,8 @@ import javax.inject.Inject
 @HiltViewModel
 class OnboardingViewModel @Inject constructor(
     private val repository: TrackRepository,
-    private val preferenceManager: PreferenceManager
+    private val preferenceManager: PreferenceManager,
+    @ApplicationContext private val context: Context
 ) : ViewModel() {
 
     // API Key 输入框的状态
@@ -52,7 +56,7 @@ class OnboardingViewModel @Inject constructor(
      */
     fun validateAndSaveApiKey() {
         if (apiKey.isBlank()) {
-            errorMessage = "请输入 API Key"
+            errorMessage = context.getString(R.string.error_empty_api_key)
             return
         }
 
@@ -65,7 +69,7 @@ class OnboardingViewModel @Inject constructor(
                 _navigateToDashboard.emit(Unit)
             } catch (e: Throwable) {
                 // 存储异常，展示错误信息
-                errorMessage = "保存出错：${e.message ?: "未知错误"}"
+                errorMessage = context.getString(R.string.error_save_api_key, e.message ?: "")
                 e.printStackTrace()
             } finally {
                 isLoading = false

@@ -13,6 +13,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.compose.ui.res.stringResource
+import com.simon.trackail.R
 
 /**
  * 设置界面
@@ -31,10 +33,10 @@ fun SettingsScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("设置") },
+                title = { Text(stringResource(R.string.settings_title)) },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "返回")
+                        Icon(Icons.Default.ArrowBack, contentDescription = stringResource(R.string.action_back))
                     }
                 }
             )
@@ -49,10 +51,10 @@ fun SettingsScreen(
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
             // 后台同步设置
-            SectionTitle("后台同步设置")
+            SectionTitle(stringResource(R.string.sync_settings))
             
             Column {
-                Text("自动刷新频率 (小时)", style = MaterialTheme.typography.bodyMedium)
+                Text(stringResource(R.string.sync_interval_label), style = MaterialTheme.typography.bodyMedium)
                 Spacer(modifier = Modifier.height(8.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -65,12 +67,12 @@ fun SettingsScreen(
                                 selectedInterval = hours
                                 viewModel.updateSyncInterval(hours)
                             },
-                            label = { Text("${hours}小时") }
+                            label = { Text(stringResource(R.string.hours_format, hours.toInt())) }
                         )
                     }
                 }
                 Text(
-                    text = "注：仅对开启了“自动刷新”星标的单号生效",
+                    text = stringResource(R.string.sync_note),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(top = 8.dp)
@@ -80,7 +82,7 @@ fun SettingsScreen(
             Divider()
 
             // 数据导出
-            SectionTitle("数据管理")
+            SectionTitle(stringResource(R.string.data_management))
             
             OutlinedButton(
                 onClick = { viewModel.exportData() },
@@ -88,13 +90,13 @@ fun SettingsScreen(
             ) {
                 Icon(Icons.Default.ExitToApp, contentDescription = null)
                 Spacer(modifier = Modifier.width(8.dp))
-                Text("导出本地数据 (JSON)")
+                Text(stringResource(R.string.action_export_data))
             }
 
             Divider()
 
             // 账户与 API
-            SectionTitle("账户与 API")
+            SectionTitle(stringResource(R.string.account_api))
             
             Button(
                 onClick = {
@@ -106,11 +108,11 @@ fun SettingsScreen(
             ) {
                 Icon(Icons.Default.Delete, contentDescription = null)
                 Spacer(modifier = Modifier.width(8.dp))
-                Text("清除 API Key 并退出")
+                Text(stringResource(R.string.action_clear_api_key_logout))
             }
             
             Text(
-                text = "Trackail v1.0.0 (17TRACK V2.4 API)\n所有数据均保存在本地，不上传服务器。",
+                text = stringResource(R.string.app_version_info),
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
@@ -122,11 +124,11 @@ fun SettingsScreen(
         exportStatus?.let { status ->
             AlertDialog(
                 onDismissRequest = { viewModel.clearExportStatus() },
-                title = { Text("提示") },
+                title = { Text(stringResource(R.string.dialog_prompt)) },
                 text = { Text(status) },
                 confirmButton = {
                     TextButton(onClick = { viewModel.clearExportStatus() }) {
-                        Text("确定")
+                        Text(stringResource(R.string.action_confirm))
                     }
                 }
             )

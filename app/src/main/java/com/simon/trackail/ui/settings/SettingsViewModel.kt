@@ -11,6 +11,9 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
+import android.content.Context
+import dagger.hilt.android.qualifiers.ApplicationContext
+import com.simon.trackail.R
 
 /**
  * 设置界面 ViewModel
@@ -18,7 +21,8 @@ import javax.inject.Inject
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     private val repository: TrackRepository,
-    private val preferenceManager: PreferenceManager
+    private val preferenceManager: PreferenceManager,
+    @ApplicationContext private val context: Context
 ) : ViewModel() {
 
     private val _exportStatus = MutableStateFlow<String?>(null)
@@ -56,9 +60,9 @@ class SettingsViewModel @Inject constructor(
                 // val json = Json.encodeToString(data)
                 
                 // TODO: 真正的文件保存逻辑 (例如使用 Storage Access Framework)
-                _exportStatus.value = "数据导出成功 (功能开发中)"
+                _exportStatus.value = context.getString(R.string.export_success)
             } catch (e: Exception) {
-                _exportStatus.value = "导出失败: ${e.message}"
+                _exportStatus.value = context.getString(R.string.export_failed, e.message ?: "")
             }
         }
     }

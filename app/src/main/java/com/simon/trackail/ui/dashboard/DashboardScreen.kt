@@ -20,6 +20,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.simon.trackail.data.local.entity.Shipment
 import java.text.SimpleDateFormat
 import java.util.*
+import androidx.compose.ui.res.stringResource
+import com.simon.trackail.R
 
 /**
  * 首页仪表盘界面
@@ -36,17 +38,17 @@ fun DashboardScreen(
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("Trackail 物流追踪") },
+                title = { Text(stringResource(R.string.dashboard_title)) },
                 actions = {
                     IconButton(onClick = onSettingsClick) {
-                        Icon(Icons.Default.Refresh, contentDescription = "设置")
+                        Icon(Icons.Default.Refresh, contentDescription = stringResource(R.string.action_settings))
                     }
                 }
             )
         },
         floatingActionButton = {
             FloatingActionButton(onClick = onAddClick) {
-                Icon(Icons.Default.Add, contentDescription = "添加单号")
+                Icon(Icons.Default.Add, contentDescription = stringResource(R.string.action_add_shipment))
             }
         }
     ) { padding ->
@@ -57,7 +59,7 @@ fun DashboardScreen(
                     .padding(padding),
                 contentAlignment = Alignment.Center
             ) {
-                Text("暂无追踪单号，请点击右下角添加", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(stringResource(R.string.empty_shipment_list), color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
         } else {
             LazyColumn(
@@ -96,15 +98,15 @@ fun ShipmentCard(
     }
 
     val statusText = when (shipment.status) {
-        10 -> "运输中"
-        20 -> "已揽收"
-        30 -> "派送中"
-        35 -> "待取货"
-        40 -> "已妥投"
-        41 -> "投递失败"
-        50 -> "包裹异常"
-        60 -> "运输过久"
-        else -> "未知状态"
+        10 -> stringResource(R.string.status_in_transit)
+        20 -> stringResource(R.string.status_picked_up)
+        30 -> stringResource(R.string.status_out_for_delivery)
+        35 -> stringResource(R.string.status_ready_for_pickup)
+        40 -> stringResource(R.string.status_delivered)
+        41 -> stringResource(R.string.status_undelivered)
+        50 -> stringResource(R.string.status_exception)
+        60 -> stringResource(R.string.status_expired)
+        else -> stringResource(R.string.status_unknown)
     }
 
     ElevatedCard(
@@ -125,7 +127,7 @@ fun ShipmentCard(
                         fontWeight = FontWeight.Bold
                     )
                     Text(
-                        text = "${shipment.carrierCode ?: "自动识别"} | ${shipment.trackingNumber}",
+                        text = "${shipment.carrierCode ?: stringResource(R.string.auto_detect)} | ${shipment.trackingNumber}",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -134,7 +136,7 @@ fun ShipmentCard(
                 IconButton(onClick = onTogglePool) {
                     Icon(
                         imageVector = if (shipment.isInPool) Icons.Filled.Star else Icons.Outlined.Star,
-                        contentDescription = "自动刷新",
+                        contentDescription = stringResource(R.string.auto_refresh),
                         tint = if (shipment.isInPool) Color(0xFFFFB300) else MaterialTheme.colorScheme.outline
                     )
                 }
@@ -157,10 +159,10 @@ fun ShipmentCard(
                 
                 Spacer(modifier = Modifier.width(8.dp))
                 
-                val dateFormat = SimpleDateFormat("MM-dd HH:mm", Locale.CHINA)
-                val updateTime = if (shipment.lastUpdate > 0) dateFormat.format(Date(shipment.lastUpdate)) else "未刷新"
+                val dateFormat = SimpleDateFormat("MM-dd HH:mm", Locale.getDefault())
+                val updateTime = if (shipment.lastUpdate > 0) dateFormat.format(Date(shipment.lastUpdate)) else stringResource(R.string.not_refreshed)
                 Text(
-                    text = "更新于: $updateTime",
+                    text = stringResource(R.string.updated_at, updateTime),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -183,7 +185,7 @@ fun ShipmentCard(
                 TextButton(onClick = onDelete) {
                     Icon(Icons.Default.Delete, contentDescription = null, modifier = Modifier.size(18.dp))
                     Spacer(modifier = Modifier.width(4.dp))
-                    Text("删除")
+                    Text(stringResource(R.string.action_delete))
                 }
             }
         }

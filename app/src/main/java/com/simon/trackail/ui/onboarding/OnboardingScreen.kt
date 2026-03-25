@@ -16,6 +16,10 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.flow.collectLatest
 
+import androidx.compose.ui.res.stringResource
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.simon.trackail.R
+
 /**
  * 入站引导界面
  * 引导用户输入 17TRACK API Key 并完成初始配置
@@ -37,7 +41,7 @@ fun OnboardingScreen(
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("欢迎使用 Trackail") }
+                title = { Text(stringResource(R.string.onboarding_title)) }
             )
         }
     ) { innerPadding ->
@@ -51,7 +55,7 @@ fun OnboardingScreen(
         ) {
             // 欢迎语
             Text(
-                text = "开启物流追踪之旅",
+                text = stringResource(R.string.onboarding_subtitle),
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(bottom = 16.dp)
@@ -59,7 +63,7 @@ fun OnboardingScreen(
 
             // 说明文字
             Text(
-                text = "本应用使用 17TRACK 提供的 API 进行物流信息查询。为了继续使用，请在下方输入您的 API Key (17token)。",
+                text = stringResource(R.string.onboarding_description),
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
@@ -68,15 +72,15 @@ fun OnboardingScreen(
                 onClick = { uriHandler.openUri("https://api.17track.net/zh-cn") },
                 modifier = Modifier.padding(bottom = 32.dp)
             ) {
-                Text("如何获取 API Key?")
+                Text(stringResource(R.string.how_to_get_api_key))
             }
 
             // API Key 输入框
             OutlinedTextField(
                 value = viewModel.apiKey,
                 onValueChange = { viewModel.onApiKeyChange(it) },
-                label = { Text("17TRACK API Key") },
-                placeholder = { Text("请输入 17token") },
+                label = { Text(stringResource(R.string.api_key_label)) },
+                placeholder = { Text(stringResource(R.string.api_key_placeholder)) },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
                 visualTransformation = PasswordVisualTransformation(),
@@ -109,7 +113,7 @@ fun OnboardingScreen(
                         strokeWidth = 2.dp
                     )
                 } else {
-                    Text("验证并保存")
+                    Text(stringResource(R.string.verify_and_save))
                 }
             }
         }

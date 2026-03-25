@@ -15,6 +15,8 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.compose.ui.res.stringResource
+import com.simon.trackail.R
 
 /**
  * 添加包裹屏幕
@@ -46,10 +48,10 @@ fun AddShipmentScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("添加包裹") },
+                title = { Text(stringResource(R.string.add_shipment_title)) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "返回")
+                        Icon(Icons.Default.ArrowBack, contentDescription = stringResource(R.string.action_back))
                     }
                 }
             )
@@ -67,9 +69,9 @@ fun AddShipmentScreen(
             OutlinedTextField(
                 value = trackingNumber,
                 onValueChange = { viewModel.onTrackingNumberChange(it) },
-                label = { Text("快递单号 (必填)") },
+                label = { Text(stringResource(R.string.tracking_number_label)) },
                 modifier = Modifier.fillMaxWidth(),
-                placeholder = { Text("请输入或粘贴单号") },
+                placeholder = { Text(stringResource(R.string.tracking_number_placeholder)) },
                 trailingIcon = {
                     Row {
                         IconButton(onClick = {
@@ -77,12 +79,12 @@ fun AddShipmentScreen(
                                 viewModel.pasteFromClipboard(it.text)
                             }
                         }) {
-                            Icon(Icons.Default.ContentPaste, contentDescription = "从剪贴板粘贴")
+                            Icon(Icons.Default.ContentPaste, contentDescription = stringResource(R.string.action_paste))
                         }
                         IconButton(onClick = {
                             // TODO: 扫码功能占位
                         }) {
-                            Icon(Icons.Default.QrCodeScanner, contentDescription = "扫码识别")
+                            Icon(Icons.Default.QrCodeScanner, contentDescription = stringResource(R.string.action_scan))
                         }
                     }
                 },
@@ -96,9 +98,9 @@ fun AddShipmentScreen(
             OutlinedTextField(
                 value = carrierCode,
                 onValueChange = { viewModel.onCarrierCodeChange(it) },
-                label = { Text("承运商代码 (可选)") },
+                label = { Text(stringResource(R.string.carrier_code_label)) },
                 modifier = Modifier.fillMaxWidth(),
-                placeholder = { Text("如: shunfeng, yuantong") },
+                placeholder = { Text(stringResource(R.string.carrier_code_placeholder)) },
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Next
                 )
@@ -108,9 +110,9 @@ fun AddShipmentScreen(
             OutlinedTextField(
                 value = alias,
                 onValueChange = { viewModel.onAliasChange(it) },
-                label = { Text("包裹备注 (可选)") },
+                label = { Text(stringResource(R.string.alias_label)) },
                 modifier = Modifier.fillMaxWidth(),
-                placeholder = { Text("例如: 我的生日礼物") },
+                placeholder = { Text(stringResource(R.string.alias_placeholder)) },
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Done
                 )
@@ -131,7 +133,7 @@ fun AddShipmentScreen(
                         strokeWidth = 2.dp
                     )
                 } else {
-                    Text("确认添加")
+                    Text(stringResource(R.string.action_confirm_add))
                 }
             }
         }

@@ -50,11 +50,13 @@ object AppModule {
     @Provides
     @Singleton
     fun provideOkHttpClient(): OkHttpClient {
-        return OkHttpClient.Builder()
-            .addInterceptor(HttpLoggingInterceptor().apply {
+        val builder = OkHttpClient.Builder()
+        if (com.simon.trackail.BuildConfig.DEBUG) {
+            builder.addInterceptor(HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BODY
             })
-            .build()
+        }
+        return builder.build()
     }
 
     @Provides
