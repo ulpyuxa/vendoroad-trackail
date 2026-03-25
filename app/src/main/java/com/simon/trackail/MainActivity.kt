@@ -27,9 +27,15 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val isConfigured = preferenceManager.is17TrackApiKeyConfigured()
-            val startDestination = if (isConfigured) "dashboard" else "onboarding"
-            
+            // 使用 remember 缓存启动页判断，避免重组时重复读取
+            val startDestination = remember {
+                try {
+                    if (preferenceManager.is17TrackApiKeyConfigured()) "dashboard" else "onboarding"
+                } catch (e: Exception) {
+                    // PreferenceManager 初始化失败时，安全回退到引导页
+                    "onboarding"
+                }
+            }
             TrackailApp(startDestination = startDestination)
         }
     }
