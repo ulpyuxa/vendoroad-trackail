@@ -48,7 +48,7 @@ class OnboardingViewModel @Inject constructor(
     }
 
     /**
-     * 验证并保存 API Key
+     * 保存 API Key 并进入主页（根据要求跳过验证）
      */
     fun validateAndSaveApiKey() {
         if (apiKey.isBlank()) {
@@ -60,18 +60,12 @@ class OnboardingViewModel @Inject constructor(
             isLoading = true
             errorMessage = null
             try {
-                val isValid = repository.validateApiKey(apiKey)
-                if (isValid) {
-                    // 验证通过，保存 Key 并触发跳转
-                    preferenceManager.save17TrackApiKey(apiKey)
-                    _navigateToDashboard.emit(Unit)
-                } else {
-                    // 验证失败
-                    errorMessage = "API Key 验证失败，请检查输入是否正确"
-                }
+                // 直接保存 Key 并触发跳转
+                preferenceManager.save17TrackApiKey(apiKey)
+                _navigateToDashboard.emit(Unit)
             } catch (e: Throwable) {
-                // 网络请求或存储异常，展示错误信息
-                errorMessage = "验证出错：${e.message ?: "未知错误"}"
+                // 存储异常，展示错误信息
+                errorMessage = "保存出错：${e.message ?: "未知错误"}"
                 e.printStackTrace()
             } finally {
                 isLoading = false

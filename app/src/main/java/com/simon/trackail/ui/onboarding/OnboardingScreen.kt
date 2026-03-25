@@ -26,6 +26,7 @@ fun OnboardingScreen(
     onNavigateToDashboard: () -> Unit,
     viewModel: OnboardingViewModel = hiltViewModel()
 ) {
+    val uriHandler = androidx.compose.ui.platform.LocalUriHandler.current
     // 监听导航事件
     LaunchedEffect(Unit) {
         viewModel.navigateToDashboard.collectLatest {
@@ -64,7 +65,7 @@ fun OnboardingScreen(
             )
 
             TextButton(
-                onClick = { /* TODO: 跳转到 17TRACK API 获取页面或显示更多说明 */ },
+                onClick = { uriHandler.openUri("https://api.17track.net/zh-cn") },
                 modifier = Modifier.padding(bottom = 32.dp)
             ) {
                 Text("如何获取 API Key?")

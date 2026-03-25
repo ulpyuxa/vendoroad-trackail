@@ -61,11 +61,11 @@ interface TrackApiService {
 
     /**
      * 用于验证 API Key 是否有效的独立接口
-     * 忽略 data 字段的具体结构，防止因为 JSON 解析异常导致验证报错
+     * 使用 getquota 接口，不需要特定参数，最适合用来测试 Key 的有效性
      */
-    @POST("getcarriercode")
+    @POST("https://api.17track.net/track/v2.4/getquota")
     suspend fun validateToken(
         @Header("17token") token: String,
-        @Body requests: List<CarrierCodeRequest>
+        @Body emptyPayload: List<String> = emptyList()
     ): TrackResponse<JsonElement>
 }

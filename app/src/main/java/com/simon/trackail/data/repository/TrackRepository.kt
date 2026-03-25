@@ -87,15 +87,12 @@ class TrackRepository @Inject constructor(
     }
     /**
      * 验证 API Key 是否有效
-     * 通过调用 getCarrierCode 接口进行简单验证，忽略 data 节点防止解析报错
+     * 通过调用 getquota 接口进行验证，避免单号识别引发的错误
      */
     suspend fun validateApiKey(token: String): Boolean {
         return try {
-            // 随便传一个合法的单号格式进行验证
-            val request = com.simon.trackail.data.remote.model.CarrierCodeRequest("YT1234567890")
-            val response = apiService.validateToken(token, listOf(request))
-            // 这里的 code == 0 表示 API Key 是有效的，即便没有识别出单号
-            // 具体的错误（如 Token 无效）会返回非 0 状态码
+            val response = apiService.validateToken(token)
+            // code == 0 表示 17TRACK 成功受理请求，说明 API Key 是有效的
             response.code == 0
         } catch (e: Exception) {
             e.printStackTrace()
