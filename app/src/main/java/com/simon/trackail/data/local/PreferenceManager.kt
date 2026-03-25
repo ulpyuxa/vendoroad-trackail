@@ -94,3 +94,4 @@ class PreferenceManager @Inject constructor(
     fun setSyncInterval(hours: Long) {
         sharedPreferences.edit().putInt(KEY_SYNC_FREQUENCY, hours.toInt()).apply()
     }
+}
