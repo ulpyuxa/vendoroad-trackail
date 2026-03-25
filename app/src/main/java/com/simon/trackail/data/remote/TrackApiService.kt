@@ -4,6 +4,7 @@ import com.simon.trackail.data.remote.model.*
 import retrofit2.http.Body
 import retrofit2.http.Header
 import retrofit2.http.POST
+import kotlinx.serialization.json.JsonElement
 
 /**
  * 17TRACK V2.4 API 接口服务
@@ -57,4 +58,14 @@ interface TrackApiService {
         @Header("17token") token: String,
         @Body requests: List<CarrierCodeRequest>
     ): TrackResponse<DataContainer<CarrierResult>>
+
+    /**
+     * 用于验证 API Key 是否有效的独立接口
+     * 忽略 data 字段的具体结构，防止因为 JSON 解析异常导致验证报错
+     */
+    @POST("getcarriercode")
+    suspend fun validateToken(
+        @Header("17token") token: String,
+        @Body requests: List<CarrierCodeRequest>
+    ): TrackResponse<JsonElement>
 }
