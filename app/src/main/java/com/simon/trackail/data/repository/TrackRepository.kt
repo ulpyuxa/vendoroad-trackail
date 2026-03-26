@@ -99,6 +99,7 @@ class TrackRepository @Inject constructor(
                         val track = result.track
                         val updatedShipment = shipment.copy(
                             status = track.status,
+                            carrierCode = result.carrier.toString(),
                             lastEvent = track.lastEvent ?: shipment.lastEvent,
                             lastUpdate = System.currentTimeMillis()
                         )
@@ -172,18 +173,27 @@ class TrackRepository @Inject constructor(
      */
     suspend fun addAndRegisterShipment(token: String, shipment: Shipment): Long {
         // 1. 调用 17TRACK API 进行注册
+        var detectedCarrier = shipment.carrierCode
         try {
-            // carrier 字段为 17TRACK 运营商 ID (Int)，Shipment.carrierCode 为字符串代码，不直接传递
-            // 传入 null 让 API 自动识别运营商
-            val request = RegisterRequest(number = shipment.trackingNumber)
-            apiService.register(token, listOf(request))
+            val req = RegisterRequest(
+                number = shipment.trackingNumber,
+                carrier = shipment.carrierCode?.toIntOrNull()
+            )
+            val response = apiService.register(token, listOf(req))
+            if (response.code == 0) {
+                val accepted = response.data?.accepted?.firstOrNull()
+                if (accepted != null) {
+                    detectedCarrier = accepted.carrier.toString()
+                }
+            }
         } catch (e: Exception) {
             // 即使注册失败，也先保存到本地，后续重试
             e.printStackTrace()
         }
         
         // 2. 保存到本地数据库
-        return shipmentDao.insertShipment(shipment)
+        val finalShipment = shipment.copy(carrierCode = detectedCarrier)
+        return shipmentDao.insertShipment(finalShipment)
     }
 
     /**
@@ -229,6 +239,7 @@ class TrackRepository @Inject constructor(
                         val track = result.track
                         val updatedShipment = shipment.copy(
                             status = track.status,
+                            carrierCode = result.carrier.toString(),
                             lastEvent = track.lastEvent ?: shipment.lastEvent,
                             lastUpdate = System.currentTimeMillis()
                         )
