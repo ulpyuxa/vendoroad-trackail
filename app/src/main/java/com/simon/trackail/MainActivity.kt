@@ -15,6 +15,7 @@ import com.simon.trackail.ui.dashboard.DashboardScreen
 import com.simon.trackail.ui.details.ShipmentDetailsScreen
 import com.simon.trackail.ui.onboarding.OnboardingScreen
 import com.simon.trackail.ui.settings.SettingsScreen
+import com.simon.trackail.ui.splash.SplashScreen
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -46,7 +47,18 @@ class MainActivity : AppCompatActivity() {
 fun TrackailApp(startDestination: String) {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = startDestination) {
+    NavHost(navController = navController, startDestination = "splash") {
+        composable("splash") {
+            SplashScreen(
+                nextDestination = startDestination,
+                onNavigate = { dest ->
+                    navController.navigate(dest) {
+                        popUpTo("splash") { inclusive = true }
+                    }
+                }
+            )
+        }
+
         composable("onboarding") {
             OnboardingScreen(
                 onNavigateToDashboard = {

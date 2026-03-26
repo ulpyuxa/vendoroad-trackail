@@ -22,7 +22,25 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    // 签名配置：从环境变量读取，适配 GitHub Actions CI 环境
+    signingConfigs {
+        getByName("debug") {
+            // CI 环境：GitHub Actions 将 keystore 解码到临时文件后，通过环境变量传入路径
+            val keystorePath = System.getenv("DEBUG_KEYSTORE_PATH")
+            if (keystorePath != null) {
+                storeFile = file(keystorePath)
+                storePassword = System.getenv("DEBUG_KEYSTORE_PASSWORD") ?: ""
+                keyAlias = System.getenv("DEBUG_KEY_ALIAS") ?: ""
+                keyPassword = System.getenv("DEBUG_KEY_PASSWORD") ?: ""
+            }
+        }
+    }
+
     buildTypes {
+        debug {
+            // 使用环境变量中的固定签名，确保每次 CI 构建签名一致，支持覆盖安装
+            signingConfig = signingConfigs.getByName("debug")
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(

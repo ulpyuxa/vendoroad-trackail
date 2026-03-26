@@ -27,16 +27,26 @@ jobs:
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v3
 
+    # 将 GitHub Secrets 中存储的 Base64 keystore 解码为临时文件
+    # 确保每次构建使用同一个签名，支持覆盖安装（不卸载直接升级）
+    - name: 解码 Debug Keystore
+      run: |
+        echo "${{ secrets.DEBUG_KEYSTORE_BASE64 }}" | base64 --decode > $RUNNER_TEMP/trackail-debug.jks
+
     - name: Build with Gradle
       run: ./gradlew assembleDebug --info 2>&1 | tee build.log; exit ${PIPESTATUS[0]}
+      env:
+        # 将 keystore 路径和凭证通过环境变量注入 build.gradle.kts
+        DEBUG_KEYSTORE_PATH: ${{ runner.temp }}/trackail-debug.jks
+        DEBUG_KEYSTORE_PASSWORD: ${{ secrets.DEBUG_KEYSTORE_PASSWORD }}
+        DEBUG_KEY_ALIAS: ${{ secrets.DEBUG_KEY_ALIAS }}
+        DEBUG_KEY_PASSWORD: ${{ secrets.DEBUG_KEY_PASSWORD }}
 
-    - name: Print kapt error log on failure
+    - name: 构建失败时打印错误日志
       if: failure()
       run: |
-        echo "=== 构建日志中的 kapt 错误 ==="
-        grep -A 30 "kaptDebugKotlin\|error:\|KAPT\|annotation" build.log | head -200 || true
-        echo "=== kapt 生成目录中的错误 ==="
-        find app/build/tmp/kapt3 -name "*.log" -exec cat {} \; 2>/dev/null || true
+        echo "=== 构建日志中的错误 ==="
+        grep -A 30 "error:\|ERROR\|FAILED" build.log | head -200 || true
 
     - name: Upload APK
       if: success()
@@ -51,4 +61,3 @@ jobs:
       with:
         name: build-failure-log
         path: build.log
-
