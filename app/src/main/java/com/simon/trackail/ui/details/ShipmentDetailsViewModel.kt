@@ -30,6 +30,9 @@ class ShipmentDetailsViewModel @Inject constructor(
     private val _events = MutableStateFlow<List<TrackingEvent>>(emptyList())
     val events: StateFlow<List<TrackingEvent>> = _events.asStateFlow()
 
+    private val _isRefreshing = MutableStateFlow(false)
+    val isRefreshing: StateFlow<Boolean> = _isRefreshing.asStateFlow()
+
     init {
         if (shipmentId != -1L) {
             loadShipmentDetails()
@@ -69,16 +72,21 @@ class ShipmentDetailsViewModel @Inject constructor(
      */
     fun forceRefreshRealTime() {
         viewModelScope.launch {
-            val shipmentDetail = repository.getShipmentById(shipmentId)
-            shipmentDetail?.let {
-                val token = preferenceManager.get17TrackApiKey()
-                if (token.isNotBlank()) {
-                    val req = com.simon.trackail.data.remote.model.TrackInfoRequest(
-                        number = it.trackingNumber,
-                        carrier = it.carrierCode?.toIntOrNull()
-                    )
-                    repository.refreshRealTimeShipment(token, listOf(req))
+            _isRefreshing.value = true
+            try {
+                val shipmentDetail = repository.getShipmentById(shipmentId)
+                shipmentDetail?.let {
+                    val token = preferenceManager.get17TrackApiKey()
+                    if (token.isNotBlank()) {
+                        val req = com.simon.trackail.data.remote.model.TrackInfoRequest(
+                            number = it.trackingNumber,
+                            carrier = it.carrierCode?.toIntOrNull()
+                        )
+                        repository.refreshRealTimeShipment(token, listOf(req))
+                    }
                 }
+            } finally {
+                _isRefreshing.value = false
             }
         }
     }

@@ -33,6 +33,7 @@ fun ShipmentDetailsScreen(
 ) {
     val shipment by viewModel.shipment.collectAsState()
     val events by viewModel.events.collectAsState()
+    val isRefreshing by viewModel.isRefreshing.collectAsState()
 
     Scaffold(
         topBar = {
@@ -44,8 +45,16 @@ fun ShipmentDetailsScreen(
                     }
                 },
                 actions = {
-                    IconButton(onClick = { viewModel.forceRefreshRealTime() }) {
-                        Icon(Icons.Default.Refresh, contentDescription = "Refresh Real-Time")
+                    if (isRefreshing) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.padding(16.dp).size(20.dp),
+                            color = MaterialTheme.colorScheme.primary,
+                            strokeWidth = 2.dp
+                        )
+                    } else {
+                        IconButton(onClick = { viewModel.forceRefreshRealTime() }) {
+                            Icon(Icons.Default.Refresh, contentDescription = "Refresh Real-Time")
+                        }
                     }
                 }
             )
