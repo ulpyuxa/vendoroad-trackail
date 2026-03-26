@@ -12,6 +12,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.simon.trackail.R
 import kotlinx.coroutines.delay
@@ -38,9 +39,9 @@ fun SplashScreen(
             modifier = Modifier.size(160.dp)
         )
 
-        // 底部版权信息（询问展示的 @版权所有）
+        // 底部版权信息，支持多语言
         Text(
-            text = "© 版权所有 VENDOROAD",
+            text = stringResource(id = R.string.splash_copyright),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier

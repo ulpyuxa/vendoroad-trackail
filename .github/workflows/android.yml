@@ -31,7 +31,8 @@ jobs:
     # 确保每次构建使用同一个签名，支持覆盖安装（不卸载直接升级）
     - name: 解码 Debug Keystore
       run: |
-        echo "${{ secrets.DEBUG_KEYSTORE_BASE64 }}" | base64 --decode > $RUNNER_TEMP/trackail-debug.jks
+        # 使用 tr 删除所有换行符和回车符，防止因为格式导致的解密失败
+        echo "${{ secrets.DEBUG_KEYSTORE_BASE64 }}" | tr -d '\n\r ' | base64 --decode > $RUNNER_TEMP/trackail-debug.jks
 
     - name: Build with Gradle
       run: ./gradlew assembleDebug --info 2>&1 | tee build.log; exit ${PIPESTATUS[0]}
