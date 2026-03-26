@@ -91,7 +91,7 @@ class AddShipmentViewModel @Inject constructor(
                 alias = _alias.value.trim().ifBlank { null },
                 status = 0, // 初始状态：查询中
                 isInPool = true,
-                lastEvent = context.getString(R.string.manually_added),
+                lastEvent = "<MANUAL_ADD>",
                 lastUpdate = System.currentTimeMillis()
             )
 

@@ -177,8 +177,9 @@ fun ShipmentCard(
 
             if (!shipment.lastEvent.isNullOrBlank()) {
                 Spacer(modifier = Modifier.height(8.dp))
+                val eventText = if (shipment.lastEvent == "<MANUAL_ADD>") stringResource(R.string.manually_added) else shipment.lastEvent
                 Text(
-                    text = shipment.lastEvent,
+                    text = eventText,
                     style = MaterialTheme.typography.bodyMedium,
                     maxLines = 2,
                     color = MaterialTheme.colorScheme.onSurface

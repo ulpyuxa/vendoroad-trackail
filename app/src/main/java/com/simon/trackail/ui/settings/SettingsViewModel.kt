@@ -27,8 +27,8 @@ class SettingsViewModel @Inject constructor(
     @ApplicationContext private val context: Context
 ) : ViewModel() {
 
-    private val _exportStatus = MutableStateFlow<String?>(null)
-    val exportStatus: StateFlow<String?> = _exportStatus
+    private val _exportStatus = MutableStateFlow<Pair<Int, String?>?>(null)
+    val exportStatus: StateFlow<Pair<Int, String?>?> = _exportStatus
 
     /**
      * 获取当前同步频率 (小时)
@@ -82,9 +82,9 @@ class SettingsViewModel @Inject constructor(
                 // val json = Json.encodeToString(data)
                 
                 // TODO: 真正的文件保存逻辑 (例如使用 Storage Access Framework)
-                _exportStatus.value = context.getString(R.string.export_success)
+                _exportStatus.value = Pair(R.string.export_success, null)
             } catch (e: Exception) {
-                _exportStatus.value = context.getString(R.string.export_failed, e.message ?: "")
+                _exportStatus.value = Pair(R.string.export_failed, e.message ?: "")
             }
         }
     }

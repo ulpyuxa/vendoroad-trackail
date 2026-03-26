@@ -178,7 +178,10 @@ fun SettingsScreen(
             AlertDialog(
                 onDismissRequest = { viewModel.clearExportStatus() },
                 title = { Text(stringResource(R.string.dialog_prompt)) },
-                text = { Text(status) },
+                text = { 
+                    val msg = if (status.second == null) stringResource(status.first) else stringResource(status.first, status.second!!)
+                    Text(msg) 
+                },
                 confirmButton = {
                     TextButton(onClick = { viewModel.clearExportStatus() }) {
                         Text(stringResource(R.string.action_confirm))
