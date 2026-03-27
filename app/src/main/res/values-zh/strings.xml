@@ -66,4 +66,7 @@
     <string name="no_events">暂未查到相关轨迹信息</string>
     <string name="event_timeline">物流时间轴</string>
     <string name="unknown_location">未知地点</string>
+
+    <!-- 启动页版权文字 -->
+    <string name="splash_copyright">© 版权所有  VENDOROAD</string>
 </resources>

@@ -66,4 +66,7 @@
     <string name="no_events">No tracking events available yet</string>
     <string name="event_timeline">Tracking Timeline</string>
     <string name="unknown_location">Unknown Location</string>
+
+    <!-- 启动页版权文字 -->
+    <string name="splash_copyright">© All Rights Reserved  VENDOROAD</string>
 </resources>
