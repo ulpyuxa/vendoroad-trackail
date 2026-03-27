@@ -14,7 +14,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:localeConfig="@xml/locales_config"
-        android:autoStoreLocales="true"
         android:theme="@style/Theme.Trackail">
         <!-- 启动页：作为 APP 的启动入口，使用专属全屏白色主题 -->
         <activity
