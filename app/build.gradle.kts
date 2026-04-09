@@ -26,12 +26,22 @@ android {
     signingConfigs {
         getByName("debug") {
             // CI 环境：GitHub Actions 将 keystore 解码到临时文件后，通过环境变量传入路径
-            val keystorePath = System.getenv("DEBUG_KEYSTORE_PATH")
-            if (keystorePath != null) {
-                storeFile = file(keystorePath)
+            val debugKeystorePath = System.getenv("DEBUG_KEYSTORE_PATH")
+            if (debugKeystorePath != null) {
+                storeFile = file(debugKeystorePath)
                 storePassword = System.getenv("DEBUG_KEYSTORE_PASSWORD") ?: ""
                 keyAlias = System.getenv("DEBUG_KEY_ALIAS") ?: ""
                 keyPassword = System.getenv("DEBUG_KEY_PASSWORD") ?: ""
+            }
+        }
+        create("release") {
+            // CI 环境：GitHub Actions 将正式 keystore 解码到临时文件后，通过环境变量传入路径
+            val releaseKeystorePath = System.getenv("RELEASE_KEYSTORE_PATH")
+            if (releaseKeystorePath != null) {
+                storeFile = file(releaseKeystorePath)
+                storePassword = System.getenv("RELEASE_KEYSTORE_PASSWORD") ?: ""
+                keyAlias = System.getenv("RELEASE_KEY_ALIAS") ?: ""
+                keyPassword = System.getenv("RELEASE_KEY_PASSWORD") ?: ""
             }
         }
     }
@@ -42,7 +52,11 @@ android {
             signingConfig = signingConfigs.getByName("debug")
         }
         release {
-            isMinifyEnabled = false
+            // 使用正式 Release 签名，用于上架 Google Play
+            signingConfig = signingConfigs.getByName("release")
+            // 启用代码混淆与资源压缩，减小包体积
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
