@@ -16,8 +16,8 @@ android {
         applicationId = "com.simon.trackail"
         minSdk = 26
         targetSdk = 35
-        versionCode = 10200
-        versionName = "1.2.0"
+        versionCode = 10101
+        versionName = "1.1.1"
         resourceConfigurations.addAll(listOf("en", "zh"))
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
