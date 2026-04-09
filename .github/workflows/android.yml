@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [ "master", "main" ]
 
+# 全局启用 Node.js 24，消除 Node.js 20 弃用告警
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   # ────────────────────────────────────────────
   # Job 1：构建 Debug APK（用于日常测试安装）
@@ -29,7 +33,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: 配置 Gradle
-        uses: gradle/actions/setup-gradle@v3
+        uses: gradle/actions/setup-gradle@v4
 
       # 将 GitHub Secrets 中存储的 Base64 keystore 解码为临时文件
       # 确保每次构建使用同一个签名，支持覆盖安装（不卸载直接升级）
@@ -87,7 +91,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: 配置 Gradle
-        uses: gradle/actions/setup-gradle@v3
+        uses: gradle/actions/setup-gradle@v4
 
       # 解码正式发布用的 Release Keystore
       # 需要在 GitHub Secrets 中配置：RELEASE_KEYSTORE_BASE64 / RELEASE_KEYSTORE_PASSWORD /
