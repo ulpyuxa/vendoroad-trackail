@@ -18,6 +18,7 @@ android {
         targetSdk = 35
         versionCode = 10200
         versionName = "1.2.0"
+        resourceConfigurations.addAll(listOf("en", "zh"))
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
