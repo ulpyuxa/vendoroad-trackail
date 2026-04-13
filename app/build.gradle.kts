@@ -17,7 +17,7 @@ android {
         minSdk = 26
         targetSdk = 35
         versionCode = 10102  //10101 内部测试，10102 封闭式测试
-        versionName = "1.1.1"
+        versionName = "1.1.2"
         resourceConfigurations.addAll(listOf("en", "zh"))
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
