@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Trackail</string>
+    <string name="app_name">VENDOROAD</string>
     <string name="onboarding_title">Welcome to Trackail</string>
     <string name="onboarding_subtitle">Start Your Tracking Journey</string>
     <string name="onboarding_description">This app uses 17TRACK API to query logistics information. Please enter your API Key (17token) below to continue.</string>

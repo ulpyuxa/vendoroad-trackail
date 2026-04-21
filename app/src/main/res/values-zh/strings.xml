@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Trackail</string>
+    <string name="app_name">VENDOROAD</string>
     <string name="onboarding_title">欢迎使用 Trackail</string>
     <string name="onboarding_subtitle">开启物流追踪之旅</string>
     <string name="onboarding_description">本应用使用 17TRACK 提供的 API 进行物流信息查询。为了继续使用，请在下方输入您的 API Key (17token)。</string>
